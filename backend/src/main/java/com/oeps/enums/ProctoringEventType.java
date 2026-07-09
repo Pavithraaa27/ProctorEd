@@ -1,0 +1,12 @@
+package com.oeps.enums;
+
+public enum ProctoringEventType {
+    TAB_SWITCH,
+    FULLSCREEN_EXIT,
+    COPY_PASTE_ATTEMPT,
+    RIGHT_CLICK_ATTEMPT,
+    NO_FACE_DETECTED,
+    MULTIPLE_FACES_DETECTED,
+    WINDOW_BLUR,
+    DEVTOOLS_OPENED
+}
