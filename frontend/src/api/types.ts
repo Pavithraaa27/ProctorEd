@@ -42,3 +42,13 @@ export interface ProctoringEvent {
   details: string;
   occurredAt: string;
 }
+
+export interface AnswerReview {
+  questionId: number;
+  questionText: string;
+  options: string[];
+  correctOptionIndex: number;
+  selectedOptionIndex: number | null;
+  correct: boolean;
+  marks: number;
+}

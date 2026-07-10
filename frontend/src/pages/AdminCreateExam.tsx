@@ -123,15 +123,30 @@ export const AdminCreateExam: React.FC = () => {
             <input value={q.questionText} onChange={(e) => updateQuestion(qIdx, { questionText: e.target.value })}
               placeholder="Question text" className={inputCls} />
 
-            {q.options.map((opt, optIdx) => (
-              <div key={optIdx} className="flex items-center gap-2">
-                <input type="radio" checked={q.correctOptionIndex === optIdx}
-                  onChange={() => updateQuestion(qIdx, { correctOptionIndex: optIdx })} className="accent-signal" />
-                <input value={opt} onChange={(e) => updateOption(qIdx, optIdx, e.target.value)}
-                  placeholder={`Option ${optIdx + 1}`}
-                  className="flex-1 bg-panel-raised border border-panel-border rounded-lg px-3 py-1.5 text-sm outline-none focus:border-signal transition-colors" />
-              </div>
-            ))}
+            <p className="text-[11px] text-ink-faint">Tap the circle next to the correct answer:</p>
+            {q.options.map((opt, optIdx) => {
+              const isCorrect = q.correctOptionIndex === optIdx;
+              return (
+                <div key={optIdx} className={`flex items-center gap-2 rounded-lg px-2 py-1 border transition-colors ${
+                  isCorrect ? "border-verified/50 bg-verified-soft" : "border-transparent"
+                }`}>
+                  <button
+                    type="button"
+                    onClick={() => updateQuestion(qIdx, { correctOptionIndex: optIdx })}
+                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors ${
+                      isCorrect ? "border-verified bg-verified" : "border-ink-faint"
+                    }`}
+                    aria-label="Mark as correct answer"
+                  >
+                    {isCorrect && <span className="w-2 h-2 rounded-full bg-void" />}
+                  </button>
+                  <input value={opt} onChange={(e) => updateOption(qIdx, optIdx, e.target.value)}
+                    placeholder={`Option ${optIdx + 1}`}
+                    className="flex-1 bg-panel-raised border border-panel-border rounded-lg px-3 py-1.5 text-sm outline-none focus:border-signal transition-colors" />
+                  {isCorrect && <span className="text-[10px] text-verified font-mono flex-shrink-0">CORRECT</span>}
+                </div>
+              );
+            })}
 
             <div>
               <label className="text-xs text-ink-muted font-medium">Marks</label>

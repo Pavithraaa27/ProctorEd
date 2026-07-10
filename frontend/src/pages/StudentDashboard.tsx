@@ -15,15 +15,32 @@ export const StudentDashboard: React.FC = () => {
     client.get("/api/attempts/my").then((r) => setMyAttempts(r.data));
   }, []);
 
-  const attemptFor = (examId: number) => myAttempts.find((a) => a.exam.id === examId);
+  const attemptFor = (examId: number) => myAttempts.find((a) => a.exam?.id === examId);
+  const completedCount = myAttempts.filter((a) => a.status === "SUBMITTED" || a.status === "AUTO_SUBMITTED").length;
+  const pendingCount = exams.length - completedCount;
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12">
       <p className="font-mono text-[11px] tracking-[0.2em] text-signal/80 mb-2">DASHBOARD</p>
       <h1 className="font-display text-2xl font-semibold text-ink mb-1">Available Exams</h1>
-      <p className="text-ink-muted text-sm mb-9">
+      <p className="text-ink-muted text-sm mb-7">
         Proctoring activates automatically the moment you start a monitored exam.
       </p>
+
+      <div className="grid grid-cols-3 gap-3 mb-9">
+        <div className="bg-panel border border-panel-border rounded-xl p-4">
+          <p className="text-xs text-ink-faint font-mono mb-1">TOTAL EXAMS</p>
+          <p className="font-display text-2xl font-semibold text-ink">{exams.length}</p>
+        </div>
+        <div className="bg-panel border border-panel-border rounded-xl p-4">
+          <p className="text-xs text-ink-faint font-mono mb-1">COMPLETED</p>
+          <p className="font-display text-2xl font-semibold text-verified">{completedCount}</p>
+        </div>
+        <div className="bg-panel border border-panel-border rounded-xl p-4">
+          <p className="text-xs text-ink-faint font-mono mb-1">PENDING</p>
+          <p className="font-display text-2xl font-semibold text-signal">{Math.max(pendingCount, 0)}</p>
+        </div>
+      </div>
 
       <div className="space-y-3">
         {exams.map((exam, i) => {

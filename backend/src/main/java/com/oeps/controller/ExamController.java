@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -35,7 +36,8 @@ public class ExamController {
     public ResponseEntity<List<QuestionPublicResponse>> getQuestions(@PathVariable Long id) {
         List<QuestionPublicResponse> publicQuestions = examService.getQuestions(id).stream()
                 .map(q -> new QuestionPublicResponse(
-                        q.getId(), q.getQuestionText(), q.getType().name(), q.getOptions(), q.getMarks()))
+                        q.getId(), q.getQuestionText(), q.getType().name(),
+                        new ArrayList<>(q.getOptions()), q.getMarks()))
                 .toList();
         return ResponseEntity.ok(publicQuestions);
     }

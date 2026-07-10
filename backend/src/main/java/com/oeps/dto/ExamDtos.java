@@ -57,4 +57,28 @@ public class ExamDtos {
             this.marks = marks;
         }
     }
+
+    /** Admin-only view of a submitted attempt: shows the correct answer next to what the student picked. */
+    @Data
+    public static class AnswerReviewResponse {
+        private Long questionId;
+        private String questionText;
+        private List<String> options;
+        private Integer correctOptionIndex;
+        private Integer selectedOptionIndex;
+        private boolean correct;
+        private Integer marks;
+
+        public AnswerReviewResponse(Long questionId, String questionText, List<String> options,
+                                     Integer correctOptionIndex, Integer selectedOptionIndex,
+                                     boolean correct, Integer marks) {
+            this.questionId = questionId;
+            this.questionText = questionText;
+            this.options = options;
+            this.correctOptionIndex = correctOptionIndex;
+            this.selectedOptionIndex = selectedOptionIndex;
+            this.correct = correct;
+            this.marks = marks;
+        }
+    }
 }

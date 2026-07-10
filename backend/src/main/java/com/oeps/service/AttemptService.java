@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -93,6 +94,23 @@ public class AttemptService {
 
     public List<ExamAttempt> getAttemptsForStudent(Long studentId) {
         return attemptRepository.findByStudentId(studentId);
+    }
+
+    public List<AnswerReviewResponse> getAnswerReview(Long attemptId) {
+        ExamAttempt attempt = getAttempt(attemptId);
+        List<Question> questions = questionRepository.findByExamId(attempt.getExam().getId());
+
+        return questions.stream().map(q -> {
+            Integer selected = attempt.getAnswers().stream()
+                    .filter(a -> a.getQuestion().getId().equals(q.getId()))
+                    .map(Answer::getSelectedOptionIndex)
+                    .findFirst()
+                    .orElse(null);
+            boolean correct = selected != null && selected.equals(q.getCorrectOptionIndex());
+            return new AnswerReviewResponse(
+                    q.getId(), q.getQuestionText(), new ArrayList<>(q.getOptions()),
+                    q.getCorrectOptionIndex(), selected, correct, q.getMarks());
+        }).toList();
     }
 
     public ExamAttempt getAttempt(Long attemptId) {

@@ -50,6 +50,18 @@ public class AttemptController {
         return ResponseEntity.ok(attemptService.getProctoringEvents(attemptId));
     }
 
+    @GetMapping("/{attemptId}/review")
+    public ResponseEntity<List<AnswerReviewResponse>> getReview(@PathVariable Long attemptId,
+                                                                  @AuthenticationPrincipal UserPrincipal principal) {
+        ExamAttempt attempt = attemptService.getAttempt(attemptId);
+        boolean isOwner = attempt.getStudent().getId().equals(principal.getUser().getId());
+        boolean isAdmin = principal.getUser().getRole().name().equals("ADMIN");
+        if (!isOwner && !isAdmin) {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(attemptService.getAnswerReview(attemptId));
+    }
+
     @GetMapping("/exam/{examId}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<ExamAttempt>> forExam(@PathVariable Long examId) {

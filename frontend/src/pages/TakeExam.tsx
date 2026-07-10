@@ -112,7 +112,7 @@ export const TakeExam: React.FC = () => {
               <>
                 <p>• This exam is proctored: camera access and fullscreen mode are required.</p>
                 <p>• Switching tabs, exiting fullscreen, or copy/paste will be flagged.</p>
-                <p>• Repeated violations will auto-submit your exam.</p>
+                <p>• <span className="text-alert font-medium">3 violations</span> will auto-submit your exam immediately.</p>
               </>
             )}
           </div>
@@ -162,7 +162,7 @@ export const TakeExam: React.FC = () => {
               </p>
               <p className="text-base text-ink mb-5">{currentQuestion.questionText}</p>
               <div className="space-y-2">
-                {currentQuestion.options.map((opt, idx) => {
+                {(currentQuestion.options ?? []).map((opt, idx) => {
                   const selected = answers[currentQuestion.id] === idx;
                   return (
                     <button

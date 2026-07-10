@@ -46,7 +46,7 @@ export const ExamResult: React.FC = () => {
         {attempt && (
           <div className="glass border border-panel-border rounded-2xl p-7 mb-7">
             <p className="font-display text-4xl font-semibold text-ink">
-              {attempt.score ?? "—"}<span className="text-ink-faint text-xl"> / {attempt.exam.totalMarks}</span>
+              {attempt.score ?? "—"}<span className="text-ink-faint text-xl"> / {attempt.exam?.totalMarks ?? "—"}</span>
             </p>
             <p className="text-xs text-ink-muted font-mono mt-2">{attempt.flagCount} integrity flag(s) recorded</p>
           </div>

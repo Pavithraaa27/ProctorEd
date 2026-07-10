@@ -41,7 +41,6 @@ public class Exam {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
-    @JsonIgnore
     private User createdBy;
 
     @Builder.Default

@@ -25,7 +25,7 @@ interface UseProctoringOptions {
  * Each violation is logged locally (for the on-screen warning banner) AND
  * posted to the backend so the admin can review it against the attempt.
  */
-export function useProctoring({ attemptId, enabled, onTerminate, maxFlags = 6 }: UseProctoringOptions) {
+export function useProctoring({ attemptId, enabled, onTerminate, maxFlags = 3 }: UseProctoringOptions) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [cameraReady, setCameraReady] = useState(false);
