@@ -1,4 +1,4 @@
-#📝ProctorEd — Online Examination & Proctoring System
+# 📝ProctorEd — Online Examination & Proctoring System
 
 A full-stack web application for running timed, proctored online exams.
 Students take MCQ exams in a browser; the app watches for tab-switching,
