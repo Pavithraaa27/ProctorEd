@@ -1,113 +1,139 @@
-# 📝ProctorEd — Online Examination & Proctoring System
+# 📝 ProctorEd — Online Examination & Proctoring System
 
-A full-stack web application for running timed, proctored online exams.
-Students take MCQ exams in a browser; the app watches for tab-switching,
-fullscreen exits, copy/paste, and webcam feed loss in real time, flags
-each violation instantly, and auto-submits after repeated violations.
-Admins get a full timestamped integrity log and an answer-by-answer
-review for every submission.
+A secure full-stack web application for conducting online examinations with real-time browser-based proctoring.
 
-## Tech Stack
+A full-stack web application for running timed, proctored online exams. Students take MCQ exams in a browser; the app watches for tab-switching, fullscreen exits, copy/paste, and webcam feed loss in real time, flags each violation instantly, and auto-submits after repeated violations. Admins get a full timestamped integrity log and an answer-by-answer review for every submission.
+Students can take timed MCQ exams while the system monitors tab switching, fullscreen exits, clipboard activity, and webcam availability. Administrators can create exams, monitor submissions, review integrity violations, and analyze answer-by-answer results.
+
+---
+
+## ✨ Features
+
+### Student
+- Secure JWT Authentication
+- Register & Login
+- Take timed MCQ exams
+- Live webcam preview
+- Real-time countdown timer
+- Question navigator
+- Automatic submission on timeout
+- View detailed exam results
+
+### Proctoring
+- Tab-switch detection
+- Fullscreen exit detection
+- Copy/Paste blocking
+- Webcam availability monitoring
+- Real-time warning system
+- Auto-submit after multiple violations
+
+### Admin
+- Create and manage exams
+- Add MCQ questions
+- Monitor student submissions
+- View integrity logs
+- Review student answers
+- Dashboard for all exam attempts
+
+---
+
+## 🛠 Tech Stack
 
 | Layer | Technology |
-|---|---|
-| Backend | Java 17, Spring Boot 3.3, Spring Security + JWT, Spring Data JPA |
-| Database | MySQL 8 (H2 in-memory for local dev without Docker) |
-| Frontend | React 19, TypeScript, Vite, Tailwind CSS, React Router, Axios, Three.js, Framer Motion |
-| Proctoring | Browser APIs — Page Visibility, Fullscreen, Clipboard, `getUserMedia` |
-| Containerization | Docker + Docker Compose |
+|--------|------------|
+| Backend | Java 17, Spring Boot 3.3, Spring Security, JWT, Spring Data JPA |
+| Database | MySQL 8, H2 (Development) |
+| Frontend | React 19, TypeScript, Vite, Tailwind CSS |
+| APIs | Axios, React Router |
+| 3D UI | Three.js, Framer Motion |
+| Proctoring | Page Visibility API, Fullscreen API, Clipboard API, getUserMedia |
+| Containerization | Docker, Docker Compose |
 
-## Architecture
+---
+
+## 🏗 Architecture
 
 ```
-┌─────────────┐        REST + JWT        ┌──────────────────┐        JPA        ┌─────────┐
-│   React SPA │ ───────────────────────► │  Spring Boot API │ ────────────────► │  MySQL  │
-│ (Vite + TS) │ ◄─────────────────────── │  (Stateless)     │ ◄──────────────── │         │
-└─────────────┘                          └──────────────────┘                    └─────────┘
-      │
-      ├─ Page Visibility API   → tab-switch detection
-      ├─ Fullscreen API        → exit detection
-      ├─ Clipboard events      → copy/paste block
-      ├─ getUserMedia          → webcam liveness check
-      └─ window size heuristic → devtools-open detection
+React + TypeScript
+        │
+ REST API + JWT
+        │
+Spring Boot Backend
+        │
+Spring Data JPA
+        │
+      MySQL
 ```
 
-Every violation is (a) shown instantly to the student as a warning, and
-(b) POSTed to `/api/attempts/{id}/proctoring-event` so the examiner can
-review a full timeline per student afterwards. After **3 flags**, the
-exam auto-submits.
+Browser APIs continuously monitor:
 
-## Project Structure
+- Page Visibility
+- Fullscreen
+- Clipboard
+- Webcam
+
+Every violation is immediately stored and displayed to administrators.
+
+---
+
+## 📂 Project Structure
 
 ```
 oeps/
-├── backend/                Spring Boot REST API
-│   └── src/main/java/com/oeps/
-│       ├── entity/         JPA models (User, Exam, Question, ExamAttempt, Answer, ProctoringEvent)
-│       ├── repository/     Spring Data repositories
-│       ├── service/        Business logic (auth, exams, attempts)
-│       ├── controller/     REST endpoints
-│       ├── security/       JWT filter, Spring Security config
-│       ├── dto/            Request/response objects (hides the answer key from students)
-│       └── config/         Security, Jackson, and seed-data config
-├── frontend/                React + TypeScript SPA
-│   └── src/
-│       ├── pages/           Login, Register, StudentDashboard, TakeExam, StudentResults,
-│       │                    ExamResult, AdminDashboard, AdminCreateExam, AdminExamMonitor
-│       ├── hooks/            useProctoring.ts — the core proctoring logic
-│       ├── components/       Navbar, ProtectedRoute, ScanOrb (3D login visual)
-│       ├── context/          AuthContext
-│       └── api/              axios client + TypeScript types
+
+├── backend/
+│   ├── controller/
+│   ├── service/
+│   ├── repository/
+│   ├── entity/
+│   ├── dto/
+│   ├── security/
+│   └── config/
+│
+├── frontend/
+│   ├── pages/
+│   ├── components/
+│   ├── hooks/
+│   ├── context/
+│   └── api/
+│
 └── docker-compose.yml
 ```
 
-## Pages / Features
+---
 
-**Student side**
-- **Login / Register** — JWT-based auth, role selection at signup
-- **Available Exams** (`/`) — stats (total / completed / pending) + exam list
-- **Take Exam** (`/exam/:id`) — live camera preview, countdown timer, question navigator, real-time integrity flag panel
-- **My Results** (`/results`) — history of completed exams with score, flag count, and a full answer-by-answer review (which options were right/wrong)
+## 🚀 Running Locally
 
-**Admin side**
-- **Exam Console** (`/admin`) — list of created exams
-- **Create Exam** (`/admin/create`) — add MCQ questions; the correct option is marked with a clearly highlighted green selector (not a plain radio button) so there's no ambiguity about what counts as correct
-- **Exam Monitor** (`/admin/monitor/:examId`) — table of all submissions; click a row to see either the **Integrity Log** (every flag, timestamped) or the **Answer Review** (each question, the correct answer, and what the student picked)
-
-## Running Locally
-
-### Option A — Docker Compose (recommended)
+### Using Docker
 
 ```bash
 docker compose up --build
 ```
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8080
 
-### Option B — Run services individually
+Frontend
 
-**Backend** (needs JDK 17 + Maven):
+```
+http://localhost:5173
+```
+
+Backend
+
+```
+http://localhost:8080
+```
+
+---
+
+### Backend
 
 ```bash
 cd backend
 mvn spring-boot:run
 ```
 
-By default it uses an **in-memory H2 database**, so no MySQL setup is
-required for a quick demo — but this also means **all data (accounts,
-exams, attempts) is wiped every time you stop and restart the backend.**
-See the Troubleshooting section below for what this means in practice.
+---
 
-To use MySQL instead (persists across restarts):
-
-```bash
-export DB_URL=jdbc:mysql://localhost:3306/oeps
-export DB_USER=oeps
-export DB_PASSWORD=oepspass
-export DB_DRIVER=com.mysql.cj.jdbc.Driver
-```
-
-**Frontend** (needs Node 18+):
+### Frontend
 
 ```bash
 cd frontend
@@ -115,78 +141,81 @@ npm install
 npm run dev
 ```
 
-Set `VITE_API_URL` in a `.env` file inside `frontend/` if your backend isn't
-on `http://localhost:8080`.
+---
 
-### Demo login
+## 🔐 Demo Credentials
 
-An admin account is seeded automatically on first boot:
+### Admin
 
-- Email: `admin@oeps.edu`
-- Password: `Admin@123`
+```
+Email:
+admin@oeps.edu
 
-Students can self-register from the app's Register page.
+Password:
+Admin@123
+```
 
-## Troubleshooting
+Students can register directly from the application.
 
-**"403 Forbidden" on API calls, or nothing happens when creating/submitting an exam**
+---
 
-This is almost always one of two things:
+## 📖 API Highlights
 
-1. **You restarted the backend.** The default database is in-memory H2 —
-   every restart wipes all accounts and data, but your browser still has
-   an old login token saved. That token now points to a user that no
-   longer exists, so the server rejects it. **Fix:** log out and log back
-   in. (As of this version, the app also auto-detects this and redirects
-   you to the login page automatically.)
-2. **Your token expired.** Tokens last 24 hours. Log out and back in.
+| Method | Endpoint | Description |
+|---------|----------|-------------|
+| POST | `/api/auth/register` | Register |
+| POST | `/api/auth/login` | Login |
+| GET | `/api/exams` | Available Exams |
+| POST | `/api/exams` | Create Exam |
+| POST | `/api/attempts/{id}/submit` | Submit Exam |
+| POST | `/api/attempts/{id}/proctoring-event` | Record Violation |
+| GET | `/api/results` | Student Results |
 
-**Backend won't start / `mvn` not found**
+---
 
-Maven isn't installed or isn't on your PATH. See the Windows setup notes
-below.
+## 🔒 Proctoring Events
 
-**Frontend shows a blank page or console errors about fonts/WebGL**
+The system detects:
 
-The login page's animated visual uses Three.js and loads Google Fonts.
-Both need normal internet access and a real GPU-capable browser — this
-is a non-issue on a normal laptop, but will look different (fallback
-fonts, software rendering) in sandboxed/headless environments.
+- Tab switching
+- Fullscreen exit
+- Clipboard usage
+- Webcam disconnect
+- Developer tools (heuristic)
 
-**Windows-specific setup**
+After three violations the exam is automatically submitted.
 
-If `mvn -version` says "not recognized": download the Maven binary zip
-from https://maven.apache.org/download.cgi, extract it (e.g. to
-`C:\Program Files\apache-maven-3.9.16`), then add
-`C:\Program Files\apache-maven-3.9.16\bin` to your System PATH via
-Environment Variables, and open a **new** terminal window.
+---
 
-## Deploying
+## 📈 Future Improvements
 
-We're deploying this next — likely **Vercel** (frontend) + **Railway**
-(backend + MySQL). Recommended flow when we get there:
+- Face Recognition
+- Liveness Detection
+- Email Notifications
+- Subjective Question Support
+- AI-assisted Proctoring
+- Examiner Role
+- Analytics Dashboard
 
-1. Push this repo to GitHub.
-2. **Railway**: create a MySQL plugin, then a service from `/backend`.
-   Set its env vars (`DB_URL`, `DB_USER`, `DB_PASSWORD`, `DB_DRIVER`,
-   `JWT_SECRET`) from the MySQL plugin's connection details.
-3. **Vercel**: import the repo, set the root directory to `/frontend`,
-   framework preset "Vite", and set `VITE_API_URL` to the Railway
-   backend's public URL.
-4. Update the backend's CORS config (`SecurityConfig.java`) to allow the
-   Vercel domain instead of `*` once both are live.
+---
 
-(Detailed step-by-step deployment guide to follow once we start this part.)
+## 📸 Screenshots
 
-## Known Limitations / Future Scope
+> Add screenshots here.
 
-- Face-count / identity verification uses a lightweight liveness heuristic
-  (webcam track health), not true face-recognition — a natural next step
-  would be a client-side model (e.g. face-api.js) or a server-side CV service.
-- No email/SMS notifications for exam scheduling yet.
-- Question bank supports MCQ/True-False only; short-answer grading would
-  need manual review tooling.
-- Single admin role today; a dedicated "Examiner" role with narrower
-  permissions would suit larger teams.
-- In-memory H2 by default means local dev data doesn't persist across
-  backend restarts — switch to MySQL (see above) if you need it to.
+```
+screenshots/
+├── login.png
+├── dashboard.png
+├── exam.png
+├── monitor.png
+└── results.png
+```
+
+---
+
+## 👨‍💻 Author
+
+**Pavithra Nair**
+
+Java • Spring Boot • React • Full Stack Development
