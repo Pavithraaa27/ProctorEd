@@ -214,8 +214,7 @@ screenshots/
 
 ---
 
-## 👨‍💻 Author
-
-**Pavithra Nair**
+## 📄 License
+MIT © Pavithra Nair
 
 Java • Spring Boot • React • Full Stack Development
