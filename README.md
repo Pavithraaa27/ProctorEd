@@ -2,9 +2,6 @@
 
 A secure full-stack web application for conducting online examinations with real-time browser-based proctoring.
 
-A full-stack web application for running timed, proctored online exams. Students take MCQ exams in a browser; the app watches for tab-switching, fullscreen exits, copy/paste, and webcam feed loss in real time, flags each violation instantly, and auto-submits after repeated violations. Admins get a full timestamped integrity log and an answer-by-answer review for every submission.
-Students can take timed MCQ exams while the system monitors tab switching, fullscreen exits, clipboard activity, and webcam availability. Administrators can create exams, monitor submissions, review integrity violations, and analyze answer-by-answer results.
-
 ---
 
 ## ✨ Features
