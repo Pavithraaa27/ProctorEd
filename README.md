@@ -186,8 +186,6 @@ After three violations the exam is automatically submitted.
 
 ## 📈 Future Improvements
 
-- Face Recognition
-- Liveness Detection
 - Email Notifications
 - Subjective Question Support
 - AI-assisted Proctoring
@@ -198,7 +196,12 @@ After three violations the exam is automatically submitted.
 
 ## 📸 Screenshots
 
-> Add screenshots here.
+<img width="1913" height="977" alt="Screenshot 2026-07-09 232050" src="https://github.com/user-attachments/assets/a3139851-f040-470e-9914-b3edd8c648a0" />
+<img width="1917" height="977" alt="Screenshot 2026-07-09 232211" src="https://github.com/user-attachments/assets/56c54f8f-196c-4cca-8390-27747bbd5bdc" />
+<img width="1352" height="960" alt="Screenshot 2026-07-09 232854" src="https://github.com/user-attachments/assets/6fe099ba-6283-4a20-980b-897c9731bb10" />
+<img width="1140" height="597" alt="Screenshot 2026-07-09 233212" src="https://github.com/user-attachments/assets/d944aa4f-5a1b-4ae8-ac74-97453b2a2aa8" />
+
+
 
 ```
 screenshots/
