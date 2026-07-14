@@ -208,8 +208,8 @@ screenshots/
 ├── login.png
 ├── dashboard.png
 ├── exam.png
-├── monitor.png
-└── results.png
+├── generateexam.png
+└── violations.png
 ```
 
 ---
