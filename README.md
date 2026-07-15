@@ -1,7 +1,7 @@
 # 📝 ProctorEd — Online Examination & Proctoring System
 
 A secure full-stack web application for conducting online examinations with real-time browser-based proctoring.
----
+
 
 ## ✨ Features
 
